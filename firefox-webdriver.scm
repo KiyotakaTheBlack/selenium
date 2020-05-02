@@ -66,6 +66,7 @@
   (setenv "MOZ_CRASHREPORTER_DISABLE" "1")
   (setenv "MOZ_NO_REMOTE" "1")
   (setenv "NO_EM_RESTART" "1")
+  (setenv "MOZ_DISABLE_CONTENT_SANDBOX" "1")
   (open-input-pipe (sprintf "~A " command)))
 
 
