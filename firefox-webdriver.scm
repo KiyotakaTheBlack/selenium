@@ -77,9 +77,8 @@
                                       (path "/")
                                       (command "geckodriver")
                                       (capabilities
-                                          '((browserName . "firefox")
-                                            (javascriptEnabled . #t)
-                                            (platform . "ANY"))))
+                                       '((alwaysMatch .
+                                          #((browserName . "firefox"))))))
   (parameterize
     ((command-executor-scheme scheme)
      (command-executor-host host)
