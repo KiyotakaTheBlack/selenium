@@ -1,1 +1,29 @@
 See http://wiki.call-cc.org/egg/selenium
+
+;;;
+e.g. PROFILE-DIR
+https://github.com/mozilla/geckodriver/issues/1058
+For above issue.You should send --marionette-port args If You want to use a firefox's pofile.
+
+(with-firefox-webdriver (lambda () (set-url! "http://www.google.com")) scheme: 'http host: "127.0.0.1" port: 4444 path: "/" command: "geckodriver --marionette-port 2828" capabilities: '((alwaysMatch .
+                                          #((browserName . "firefox")
+                                           ("moz:firefoxOptions" .
+                                            #((args "-profile" "PROFILE-DIR")))))))
+
+
+(use json)
+(json-read (open-input-string "{
+  \"capabilities\": {
+    \"alwaysMatch\": {
+      \"browserName\": \"firefox\",
+      \"browserVersion\": 60,
+      \"moz:firefoxOptions\": {\"args\": [\"-profile\", \"PROFILE-DIR\"]}
+    }
+  }
+}"))
+
+(json-write #((capabilities .
+	    #((alwaysMatch .
+                #((browserName . "firefox")
+                 (moz:firefoxOptions .
+                 #((args "-profile" "PROFILE-DIR")))))))))
