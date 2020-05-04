@@ -84,7 +84,7 @@
      (command-executor-host host)
      (command-executor-port port)
      (command-executor-path path)
-     (desired-capabilities capabilities))
+     (w3c-capabilities capabilities))
     (run-firefox command profile-dir)
 
     ;; Wait until the webdriver starts accepting requests

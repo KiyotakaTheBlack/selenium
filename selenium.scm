@@ -57,7 +57,7 @@
    with-firefox-webdriver
 
    ;; "Remote" webdriver
-   with-remote-webdriver
+;;;   with-remote-webdriver
    )
 
 (import chicken scheme)
@@ -70,7 +70,7 @@
 
 ;;; Parameters to be set by webdrivers
 (define session-identifier (make-parameter #f))
-(define desired-capabilities (make-parameter #f))
+(define w3c-capabilities (make-parameter #f))
 (define command-executor-scheme (make-parameter #f))
 (define command-executor-host (make-parameter #f))
 (define command-executor-port (make-parameter #f))
@@ -90,8 +90,8 @@
   (let* ((req-headers
           (lambda (data)
             (headers
-             `((content-type application/json) ;charset=UTF-8")
-               (accept "application/json")
+             `((content-type #(application/json ((charset . utf-8))))
+               (accept application/json)
                (connection Keep-Alive)
                (content-length ,(string-length data))))))
          (response
@@ -121,6 +121,7 @@
                json-read))))
          (response-code (alist-ref "status" (vector->list response) equal?)))
     (case response-code
+      ((#f) (vector->list response)) ;for debug
       ((0) (vector->list response))
       ((7) (request-error
             'NoSuchElement
@@ -205,10 +206,10 @@
 ;;; Session
 (define (start-session)
   (let ((response
-         (remote-execute 'POST "/session"
-                         json-args: `((desiredCapabilities
+         (vector->list (response-value (remote-execute 'POST "/session"
+                         json-args: `((capabilities
                                        . ,(list->vector
-                                           (desired-capabilities)))))))
+                                           (w3c-capabilities)))))))))
     (or (alist-ref "sessionId" response equal?)
         (error 'start-session "Could not get a session identifier."))))
 
@@ -617,6 +618,6 @@
   (remote-execute 'POST "/session/~A/doubleclick"))
 
 (include "firefox-webdriver.scm")
-(include "remote-webdriver.scm")
+;;;(include "remote-webdriver.scm")
 
 ) ;; end module
