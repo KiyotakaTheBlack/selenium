@@ -60,9 +60,17 @@
 ;;;   with-remote-webdriver
    )
 
-(import chicken scheme)
-(use json http-client intarweb uri-common srfi-13 srfi-1 regex
-     data-structures extras files ports tcp srfi-18 posix)
+(import scheme)
+
+(cond-expand
+	(chicken-4
+		(import chicken)
+		(use json http-client intarweb uri-common srfi-13 srfi-1 regex
+		data-structures extras files ports tcp srfi-18 posix))
+    (else
+		(import chicken.base chicken.string chicken.format chicken.condition chicken.process chicken.port chicken.pathname srfi-12)
+		(import json http-client intarweb uri-common srfi-13 srfi-1 regex
+		tcp6 srfi-18)))
 
 (include "keys.scm")
 

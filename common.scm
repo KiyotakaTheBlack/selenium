@@ -1,4 +1,8 @@
-(use tcp)
+(cond-expand
+	(chicken-4
+		(use tcp))
+    (else
+		(import tcp6)))
 
 (define (can-connect? host port)
   (handle-exceptions exn
